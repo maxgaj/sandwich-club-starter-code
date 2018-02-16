@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -15,12 +16,23 @@ public class DetailActivity extends AppCompatActivity {
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
 
+    private TextView mOriginTextView;
+    private TextView mDescriptionTextView;
+    private TextView mAKATextView;
+    private TextView mIngredientsTextView;
+    private Sandwich mSandwich;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
         ImageView ingredientsIv = findViewById(R.id.image_iv);
+        mOriginTextView = (TextView) findViewById(R.id.origin_tv);
+        mDescriptionTextView = (TextView) findViewById(R.id.description_tv);
+        mAKATextView = (TextView) findViewById(R.id.also_known_tv);
+        mIngredientsTextView = (TextView) findViewById(R.id.ingredients_tv);
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -42,6 +54,7 @@ public class DetailActivity extends AppCompatActivity {
             closeOnError();
             return;
         }
+        mSandwich = sandwich;
 
         populateUI();
         Picasso.with(this)
@@ -57,6 +70,9 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void populateUI() {
-
+        mOriginTextView.setText(mSandwich.getPlaceOfOrigin());
+        mDescriptionTextView.setText(mSandwich.getDescription());
+        mAKATextView.setText(JsonUtils.parseListToString(mSandwich.getAlsoKnownAs()));
+        mIngredientsTextView.setText(JsonUtils.parseListToString(mSandwich.getIngredients()));
     }
 }
